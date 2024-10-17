@@ -1,0 +1,88 @@
+name: Utility repo push
+
+on:
+  push:
+    branches:
+      - feature/*
+      - fix/*
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: read
+
+jobs:
+  check_image_on_amd64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build test Docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          load: true
+          tags: utility-test:linux-amd64
+          platforms: linux/amd64
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run pytest
+        env:
+          IMAGE_NAME: "utility-test:linux-amd64"
+        run: |
+          pytest
+
+  check_image_on_arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build test Docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          load: true
+          tags: utility-test:linux-arm64
+          platforms: linux/arm64
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
+      - name: Run pytest
+        env:
+          IMAGE_NAME: "utility-test:linux-arm64"
+        run: |
+          pytest
