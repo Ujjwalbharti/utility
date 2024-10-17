@@ -12,7 +12,6 @@ permissions:
 jobs:
   check_image_on_amd64:
     runs-on: ubuntu-latest
-    environment: common
 
     steps:
       - name: Checkout repository
@@ -86,6 +85,7 @@ jobs:
           pytest
   publish-production-image:
     runs-on: ubuntu-20.04
+    environment: common
     needs: [check_image_on_amd64, check_image_on_arm64]
     steps:
       - name: Checkout
