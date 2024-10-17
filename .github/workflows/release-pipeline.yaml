@@ -108,4 +108,4 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ujjwalbharti111/utility:${{github.ref_name}},ujjwalbharti111/utility:latest
+          tags: ujjwalbharti111/utility:${{github.ref_name##v}},ujjwalbharti111/utility:latest
