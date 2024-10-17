@@ -93,7 +93,9 @@ jobs:
 
       - name: Remove v from tag version
         id: strip_v_from_tag
-        run: echo "STRIPPED_TAG=${GITHUB_REF##*/}" | sed 's/^v//' >> $GITHUB_ENV
+        run: |
+          STRIPPED_TAG=$(echo "${GITHUB_REF##*/}" | sed 's/^v//')
+          echo "STRIPPED_TAG=$STRIPPED_TAG" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
