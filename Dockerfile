@@ -7,4 +7,6 @@ RUN apt-get update \
     postgresql-client \
     redis-tools \
     wget \
+    python3 \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
